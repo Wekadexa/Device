@@ -1,20 +1,23 @@
 package com.example.devicelockcompanion.utils
 
+import android.util.Log
 import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
 
 /**
- * Utility class for executing root commands.
- * This class is used to check for root access and execute commands as superuser.
+ * Utility object for executing root commands.
+ * This object is used to check for root access and execute commands as superuser.
  */
-class RootUtils {
+object RootUtils {
+    private const val TAG = "RootUtils"
+    
     /**
      * Check if the device has root access
      * @return true if root access is available, false otherwise
      */
-    fun hasRootAccess(): Boolean {
+    fun checkRootAccess(): Boolean {
         return try {
             // Try to execute a simple command with su
             val process = Runtime.getRuntime().exec("su -c echo root_test")
@@ -25,9 +28,12 @@ class RootUtils {
             val finished = process.waitFor(1, TimeUnit.SECONDS)
             
             // Check if process finished and output matches expected
-            finished && output == "root_test"
+            val hasRoot = finished && output == "root_test"
+            Log.d(TAG, "Root access check result: $hasRoot")
+            hasRoot
         } catch (e: Exception) {
             // If any exception occurs, root is not available
+            Log.e(TAG, "Error checking root access", e)
             false
         }
     }
@@ -37,7 +43,8 @@ class RootUtils {
      * @param command The command to execute
      * @return The output of the command
      */
-    fun executeCommand(command: String): String {
+    fun executeRootCommand(command: String): String {
+        Log.d(TAG, "Executing root command: $command")
         var process: Process? = null
         var outputStream: DataOutputStream? = null
         var inputStream: BufferedReader? = null
@@ -78,14 +85,17 @@ class RootUtils {
                 error.append("\n")
             }
             
-            // If there's error output, throw exception
+            // If there's error output that isn't just warnings, log it
             if (error.isNotEmpty()) {
-                throw Exception("Error executing command: $error")
+                Log.w(TAG, "Command produced error output: $error")
             }
             
-            return output.toString().trim()
+            val result = output.toString().trim()
+            Log.d(TAG, "Command output: $result")
+            return result
         } catch (e: Exception) {
-            throw e
+            Log.e(TAG, "Error executing root command", e)
+            return "Error: ${e.message}"
         } finally {
             // Close all streams
             try {
