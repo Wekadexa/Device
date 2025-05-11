@@ -1,0 +1,8 @@
+/home/runner/workspace/app/src/main/java/com/example/devicelockcompanion/MainActivity.kt
+/home/runner/workspace/app/src/main/java/com/example/devicelockcompanion/receivers/SecretCodeReceiver.kt
+/home/runner/workspace/app/src/main/java/com/example/devicelockcompanion/utils/DeviceLockUtils.kt
+/home/runner/workspace/app/src/main/java/com/example/devicelockcompanion/utils/LogUtils.kt
+/home/runner/workspace/app/src/main/java/com/example/devicelockcompanion/utils/IntentUtils.kt
+/home/runner/workspace/app/src/main/java/com/example/devicelockcompanion/utils/RootUtils.kt
+/home/runner/workspace/app/src/main/java/com/example/devicelockcompanion/viewmodel/MainViewModel.kt
+/home/runner/workspace/app/src/main/java/com/example/devicelockcompanion/dialogs/ConfirmationDialog.kt

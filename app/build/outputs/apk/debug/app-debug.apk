@@ -1,0 +1,16 @@
+
+DeviceLock Companion App for Android
+====================================
+
+This is a placeholder for the actual APK binary file, which would be generated
+through a complete Gradle build process. Due to build environment constraints,
+we're providing this file to represent the app concept.
+
+To build the full app:
+1. Clone the repository
+2. Remove Compose references (if using View Binding)
+3. Build with Gradle: ./gradlew assembleDebug
+4. Install on device: adb install app-debug.apk
+
+See the README.txt file for full details about the app functionality.
+
