@@ -1,6 +1,5 @@
 # DeviceLock Companion App
-
-## Overview
+,## Overview
 
 DeviceLock Companion is an Android application designed to interact with the HMD Global DeviceLock system app (com.hmdglobal.app.devicelock) for educational purposes. This app demonstrates how to detect, interact with, and potentially modify system applications on Android devices.
 
