@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DeviceLock Companion</string>
+    
+    <!-- Status strings -->
+    <string name="status_installed">Installed</string>
+    <string name="status_not_installed">Not Installed</string>
+    <string name="status_available">Available</string>
+    <string name="status_not_available">Not Available</string>
+    
+    <!-- Error messages -->
+    <string name="activity_not_found">Activity not found</string>
+    <string name="error_action_failed">Action failed</string>
+    
+    <!-- Dialogs -->
+    <string name="warning">Warning</string>
+    <string name="wipe_confirmation">This will wipe DeviceLock registration data. This action is for educational purposes only and may cause issues with the DeviceLock app. Do you want to proceed?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    
+    <!-- Card titles -->
+    <string name="title_device_lock">DeviceLock System App</string>
+    <string name="title_root_access">Root Access</string>
+    <string name="title_actions">Actions</string>
+    <string name="title_root_actions">Root Actions (Educational Only)</string>
+    <string name="title_logs">Operation Logs</string>
+    
+    <!-- Button labels -->
+    <string name="btn_launch_update">Launch Update Activity</string>
+    <string name="btn_launch_factory_enroll">Launch Factory Enroll Activity</string>
+    <string name="btn_trigger_secret_code">Trigger Secret Code</string>
+    <string name="btn_view_prefs">View Shared Preferences</string>
+    <string name="btn_view_db">View Database Files</string>
+    <string name="btn_wipe_data">Wipe Registration Data</string>
+    
+    <!-- Messages -->
+    <string name="no_device_lock">DeviceLock app not detected. Actions are unavailable.</string>
+    <string name="disclaimer">This application is intended for educational use only. Do not use it to bypass or interfere with system security mechanisms without proper authorization.</string>
+    <string name="no_logs">No logs yet…</string>
+</resources>

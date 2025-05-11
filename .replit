@@ -2,7 +2,7 @@ modules = ["kotlin", "nodejs-20"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["openjdk11", "gradle", "android-tools", "wget", "unzip"]
+packages = ["openjdk11", "gradle", "android-tools", "wget", "unzip", "zip"]
 
 [workflows]
 runButton = "Project"
