@@ -53,32 +53,41 @@ class MainActivity : AppCompatActivity() {
     private fun initializeUI() {
         // Set up button click listeners for device lock actions
         binding.launchUpdateActivityButton.setOnClickListener {
-            try {
-                val intent = DeviceLockUtils.getUpdateActivityIntent()
-                startActivity(intent)
+            val intent = DeviceLockUtils.getUpdateActivityIntent()
+            val success = IntentUtils.safeStartActivity(
+                this, 
+                intent, 
+                R.string.activity_not_found
+            )
+            
+            if (success) {
                 LogUtils.logInfo("Launched DeviceLock Update Activity")
                 viewModel.addLogEntry("Launched DeviceLock Update Activity")
-            } catch (e: Exception) {
-                LogUtils.logError("Failed to launch Update Activity: ${e.message}")
-                viewModel.addLogEntry("Error: Failed to launch Update Activity - ${e.message}")
+            } else {
+                viewModel.addLogEntry("Failed to launch Update Activity - Activity not found")
             }
         }
         
         binding.launchFactoryEnrollActivityButton.setOnClickListener {
-            try {
-                val intent = DeviceLockUtils.getFactoryEnrollActivityIntent()
-                startActivity(intent)
+            val intent = DeviceLockUtils.getFactoryEnrollActivityIntent()
+            val success = IntentUtils.safeStartActivity(
+                this, 
+                intent, 
+                R.string.activity_not_found
+            )
+            
+            if (success) {
                 LogUtils.logInfo("Launched DeviceLock Factory Enroll Activity")
                 viewModel.addLogEntry("Launched DeviceLock Factory Enroll Activity")
-            } catch (e: Exception) {
-                LogUtils.logError("Failed to launch Factory Enroll Activity: ${e.message}")
-                viewModel.addLogEntry("Error: Failed to launch Factory Enroll Activity - ${e.message}")
+            } else {
+                viewModel.addLogEntry("Failed to launch Factory Enroll Activity - Activity not found")
             }
         }
         
         binding.triggerSecretCodeButton.setOnClickListener {
             try {
-                DeviceLockUtils.triggerDeviceLockSecretCode()
+                val intent = DeviceLockUtils.triggerDeviceLockSecretCode()
+                sendBroadcast(intent)
                 LogUtils.logInfo("Triggered DeviceLock Secret Code")
                 viewModel.addLogEntry("Triggered DeviceLock Secret Code")
             } catch (e: Exception) {
@@ -111,14 +120,23 @@ class MainActivity : AppCompatActivity() {
         }
         
         binding.wipeRegistrationDataButton.setOnClickListener {
-            try {
-                RootUtils.wipeDeviceLockData()
-                viewModel.addLogEntry("Wiped DeviceLock Registration Data")
-                LogUtils.logInfo("Wiped DeviceLock Registration Data")
-            } catch (e: Exception) {
-                LogUtils.logError("Failed to wipe Registration Data: ${e.message}")
-                viewModel.addLogEntry("Error: Failed to wipe Registration Data - ${e.message}")
-            }
+            // Show confirmation dialog before wiping data
+            com.example.devicelockcompanion.dialogs.ConfirmationDialog.show(
+                this,
+                getString(R.string.warning),
+                getString(R.string.wipe_confirmation),
+                {
+                    // User confirmed, proceed with wiping
+                    try {
+                        RootUtils.wipeDeviceLockData()
+                        viewModel.addLogEntry("Wiped DeviceLock Registration Data")
+                        LogUtils.logInfo("Wiped DeviceLock Registration Data")
+                    } catch (e: Exception) {
+                        LogUtils.logError("Failed to wipe Registration Data: ${e.message}")
+                        viewModel.addLogEntry("Error: Failed to wipe Registration Data - ${e.message}")
+                    }
+                }
+            )
         }
     }
     
