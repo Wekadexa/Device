@@ -1,2 +1,3 @@
 rootProject.name = "DeviceLockCompanion"
 include ':app'
+include ':devicelock-companion'

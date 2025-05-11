@@ -43,6 +43,13 @@ android {
         exclude 'META-INF/AL2.0'
         exclude 'META-INF/LGPL2.1'
     }
+    
+    // Fix for "Several variant outputs are configured to use the same file name"
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "devicelock-companion-${variant.name}-v${variant.versionName}.apk"
+        }
+    }
 }
 
 dependencies {
