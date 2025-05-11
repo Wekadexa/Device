@@ -44,4 +44,4 @@ This application should not be used to bypass or interfere with system security 
 ## Requirements
 
 - Android 8.0 (API level 26) or higher
-- Root access for advanced features (optional)
+- Root access for advanced features (optional)# Unlocker
