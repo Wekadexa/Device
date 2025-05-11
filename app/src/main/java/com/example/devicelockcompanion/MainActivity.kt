@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.devicelockcompanion.databinding.ActivityMainBinding
 import com.example.devicelockcompanion.utils.DeviceLockUtils
+import com.example.devicelockcompanion.utils.IntentUtils
 import com.example.devicelockcompanion.utils.LogUtils
 import com.example.devicelockcompanion.utils.RootUtils
 import com.example.devicelockcompanion.viewmodel.MainViewModel

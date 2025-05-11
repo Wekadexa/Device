@@ -7,38 +7,28 @@ import android.widget.Toast
 import com.example.devicelockcompanion.utils.LogUtils
 
 /**
- * Broadcast receiver for handling secret code intents.
- * This can be used to receive and handle the DeviceLock secret codes.
+ * Broadcast receiver to handle secret code triggers from the system
  */
 class SecretCodeReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        LogUtils.logInfo("Secret code received: ${intent.data}")
-        
+        // Check if this is a secret code intent
         if (intent.action == "android.provider.Telephony.SECRET_CODE") {
+            // Extract the code from the URI
             val host = intent.data?.host ?: return
             
+            LogUtils.logInfo("Received secret code: $host")
+            
             when (host) {
-                // DeviceLock app secret code
-                "73447837" -> {
-                    LogUtils.logInfo("DeviceLock secret code activated")
-                    Toast.makeText(context, 
-                        "DeviceLock secret code activated", 
-                        Toast.LENGTH_LONG
-                    ).show()
-                    
-                    // Here you could start an activity or perform other actions
-                    // Example: starting MainActivity with a specific flag
-                    val launchIntent = Intent(context, 
-                        Class.forName("com.example.devicelockcompanion.MainActivity")
-                    ).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        putExtra("FROM_SECRET_CODE", true)
-                    }
-                    context.startActivity(launchIntent)
+                // Handle device lock related secret codes here
+                "73447837" -> {  // DEVICEL
+                    LogUtils.logInfo("DeviceLock secret code received")
+                    Toast.makeText(context, "DeviceLock secret code triggered", Toast.LENGTH_SHORT).show()
+                    // Here you would typically launch an activity or perform some action
                 }
                 
+                // More codes can be added here
                 else -> {
-                    LogUtils.logInfo("Unknown secret code: $host")
+                    LogUtils.logInfo("Unknown secret code received: $host")
                 }
             }
         }

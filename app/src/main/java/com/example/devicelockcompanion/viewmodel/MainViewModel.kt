@@ -1,36 +1,36 @@
 package com.example.devicelockcompanion.viewmodel
 
 import android.content.Context
-import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.devicelockcompanion.utils.DeviceLockUtils
 import com.example.devicelockcompanion.utils.LogUtils
-import com.example.devicelockcompanion.utils.RootUtils
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
+/**
+ * ViewModel for MainActivity that handles business logic and state
+ */
 class MainViewModel : ViewModel() {
-    private val _deviceLockInstalled = MutableLiveData<Boolean>(false)
-    val deviceLockInstalled: LiveData<Boolean> = _deviceLockInstalled
-    
-    private val _rootAccess = MutableLiveData<Boolean>(false)
-    val rootAccess: LiveData<Boolean> = _rootAccess
-    
-    private val _logs = MutableLiveData<String>("")
-    val logs: LiveData<String> = _logs
-    
     private lateinit var context: Context
     
-    // Constants
-    private val DEVICELOCK_PACKAGE = "com.hmdglobal.app.devicelock"
+    // LiveData for observed states
+    private val _deviceLockInstalled = MutableLiveData<Boolean>()
+    val deviceLockInstalled: LiveData<Boolean> = _deviceLockInstalled
     
+    private val _rootAccess = MutableLiveData<Boolean>()
+    val rootAccess: LiveData<Boolean> = _rootAccess
+    
+    private val _logs = MutableLiveData<String>()
+    val logs: LiveData<String> = _logs
+    
+    /**
+     * Initialize the ViewModel with a context
+     */
     fun initialize(context: Context) {
         this.context = context
+        _logs.value = ""
+        
+        // Initial state checks
         checkDeviceLockPresence()
     }
     
@@ -38,40 +38,50 @@ class MainViewModel : ViewModel() {
      * Check if the DeviceLock app is installed
      */
     fun checkDeviceLockPresence() {
-        viewModelScope.launch {
-            try {
-                // Check if the package is installed
-                context.packageManager.getPackageInfo(DEVICELOCK_PACKAGE, 0)
-                _deviceLockInstalled.postValue(true)
-                addLogEntry("DeviceLock app detected")
-            } catch (e: PackageManager.NameNotFoundException) {
-                _deviceLockInstalled.postValue(false)
-                addLogEntry("DeviceLock app not installed")
-            }
+        try {
+            val isInstalled = DeviceLockUtils.isDeviceLockInstalled(context)
+            _deviceLockInstalled.value = isInstalled
+            
+            LogUtils.logInfo("DeviceLock app installed: $isInstalled")
+            addLogEntry("DeviceLock app installed: $isInstalled")
+        } catch (e: Exception) {
+            LogUtils.logError("Error checking DeviceLock presence", e)
+            addLogEntry("Error checking DeviceLock presence: ${e.message}")
+            _deviceLockInstalled.value = false
         }
     }
     
     /**
-     * Set the root access flag
+     * Set the root access status
      */
     fun setRootAccess(hasRoot: Boolean) {
-        _rootAccess.postValue(hasRoot)
+        _rootAccess.value = hasRoot
     }
     
     /**
-     * Add a log entry to the logs text
+     * Add an entry to the log
      */
-    fun addLogEntry(message: String) {
-        val timestamp = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-        val newLogEntry = "[$timestamp] $message"
-        
+    fun addLogEntry(entry: String) {
         val currentLogs = _logs.value ?: ""
-        val updatedLogs = if (currentLogs.isEmpty()) {
-            newLogEntry
+        val timestamp = System.currentTimeMillis()
+        val newLogs = "$timestamp: $entry\n$currentLogs"
+        
+        // Keep logs at a reasonable size
+        val maxLength = 10000
+        val trimmedLogs = if (newLogs.length > maxLength) {
+            newLogs.substring(0, maxLength)
         } else {
-            "$currentLogs\n$newLogEntry"
+            newLogs
         }
         
-        _logs.postValue(updatedLogs)
+        _logs.value = trimmedLogs
+    }
+    
+    /**
+     * Clear logs
+     */
+    fun clearLogs() {
+        _logs.value = ""
+        LogUtils.logInfo("Logs cleared")
     }
 }

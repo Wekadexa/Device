@@ -5,31 +5,34 @@ import android.content.Context
 import com.example.devicelockcompanion.R
 
 /**
- * Helper class for creating confirmation dialogs.
+ * Dialog for confirming potentially dangerous operations
  */
 object ConfirmationDialog {
     /**
-     * Show a confirmation dialog with the given message and callbacks.
-     * @param context The context to use for the dialog
-     * @param message The message to display in the dialog
-     * @param positiveAction Action to perform when the user confirms
+     * Show a confirmation dialog with the specified title and message
+     * 
+     * @param context The context to show the dialog in
+     * @param title The title of the dialog
+     * @param message The message to display
+     * @param onConfirm Called when the user confirms the action
      */
     fun show(
-        context: Context, 
-        title: String, 
-        message: String, 
-        positiveAction: () -> Unit
+        context: Context,
+        title: String,
+        message: String,
+        onConfirm: () -> Unit
     ) {
-        AlertDialog.Builder(context)
+        val builder = AlertDialog.Builder(context)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(R.string.proceed) { _, _ -> 
-                positiveAction() 
+            .setPositiveButton(R.string.proceed) { _, _ ->
+                onConfirm()
             }
-            .setNegativeButton(R.string.cancel) { dialog, _ -> 
-                dialog.dismiss() 
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
             }
             .setCancelable(true)
-            .show()
+            
+        builder.create().show()
     }
 }
